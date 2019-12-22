@@ -38,13 +38,13 @@ link_parameters = \
     $(LIBRARY_COMMON)
 
 OBJS =  main.o \
-        question1.o \
-        question2.o \
-        question3.o \
-        question4.o \
-        question5.o \
-        question6.o \
-        question7.o
+        fizbuz.o \
+        operator_plus.o \
+        signatures.o \
+        assignment_operator.o \
+        singleton.o \
+        queue.o \
+        vector_upper_bound.o
 
 $(PROGRAM_NAME): $(OBJS) 
 	@echo " "
@@ -54,26 +54,26 @@ $(PROGRAM_NAME): $(OBJS)
 main.o: main.cpp
 	$(CXX) -c $(CXXFLAGS) main.cpp
 
-question1.o: question1.cpp
-	$(CXX) -c $(CXXFLAGS) question1.cpp
+fizbuz.o: fizbuz.cpp
+	$(CXX) -c $(CXXFLAGS) fizbuz.cpp
 
-question2.o: question2.cpp
-	$(CXX) -c $(CXXFLAGS) question2.cpp
+operator_plus.o: operator_plus.cpp
+	$(CXX) -c $(CXXFLAGS) operator_plus.cpp
 
-question3.o: question3.cpp
-	$(CXX) -c $(CXXFLAGS) question3.cpp
+signatures.o: signatures.cpp
+	$(CXX) -c $(CXXFLAGS) signatures.cpp
 
-question4.o: question4.cpp
-	$(CXX) -c $(CXXFLAGS) question4.cpp
+assignment_operator.o: assignment_operator.cpp
+	$(CXX) -c $(CXXFLAGS) assignment_operator.cpp
 
-question5.o: question5.cpp
-	$(CXX) -c $(CXXFLAGS) question5.cpp
+singleton.o: singleton.cpp
+	$(CXX) -c $(CXXFLAGS) singleton.cpp
 
-question6.o: question6.cpp
-	$(CXX) -c $(CXXFLAGS) question6.cpp
+queue.o: queue.cpp
+	$(CXX) -c $(CXXFLAGS) queue.cpp
 
-question7.o: question7.cpp
-	$(CXX) -c $(CXXFLAGS) question7.cpp
+vector_upper_bound.o: vector_upper_bound.cpp
+	$(CXX) -c $(CXXFLAGS) vector_upper_bound.cpp
 
 clean:
 	@-$(RM) $(OBJS) 2>&1 >/dev/null
