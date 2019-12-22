@@ -44,7 +44,8 @@ OBJS =  main.o \
         assignment_operator.o \
         singleton.o \
         queue.o \
-        vector_upper_bound.o
+        vector_upper_bound.o \
+        job_chain.o
 
 $(PROGRAM_NAME): $(OBJS) 
 	@echo " "
@@ -74,6 +75,9 @@ queue.o: queue.cpp
 
 vector_upper_bound.o: vector_upper_bound.cpp
 	$(CXX) -c $(CXXFLAGS) vector_upper_bound.cpp
+
+job_chain.o: job_chain.cpp
+	$(CXX) -c $(CXXFLAGS) job_chain.cpp
 
 clean:
 	@-$(RM) $(OBJS) 2>&1 >/dev/null

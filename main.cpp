@@ -11,6 +11,7 @@ void assignment_operator();
 void single();
 void queue();
 void vub( std::vector<std::int64_t>& /*v*/, std::int64_t /*min_val*/ );
+void job_chain();
 
 
 int main( int /*argc*/, char **/*argv*/ )
@@ -23,5 +24,6 @@ int main( int /*argc*/, char **/*argv*/ )
 	queue();
 	std::vector<std::int64_t> v{1, 7, 3, 6, 5, 2, 4};
 	vub( v, 3 );
+	job_chain();
 	return 0;
 }
