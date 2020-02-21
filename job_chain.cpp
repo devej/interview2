@@ -1,49 +1,63 @@
 
+#include <algorithm>
+#include <chrono>
+#include <charconv>
 #include <cstdint>
 #include <iostream>
-#include <vector>
-#include <map>
-#include <chrono>
-#include <algorithm>
 #include <iomanip>
+#include <map>
 #include <string_view>
+#include <vector>
 
 
-// would have preferred boost::split
-std::vector< std::string_view > split( std::string_view line, const std::string& delim )
+// boost::split doesn't seem to handle string_view yet
+std::vector< std::string_view > split( std::string_view line, const std::string& delims = "," )
 {
-	size_t last{0};
-	size_t next{0};
 	std::vector< std::string_view > result;
+	size_t first{0};
 
-	while( (next = line.find(delim, last)) != std::string_view::npos )
+	while( first < line.size() )
 	{
-		result.emplace_back( line.substr(last, next - last) );
-		last = next + delim.size();
+		const auto second = line.find_first_of( delims, first );
+		if( first != second )
+			result.emplace_back( line.substr( first, second-first ) );
+
+		if( second == std::string_view::npos )
+			break;
+
+		first = second + 1;
 	}
 
-	result.emplace_back( line.substr(last) );
 	return result;
 }
 
+int64_t to_int( std::string_view s )
+{
+	int64_t result{0};
+
+	if( auto [p, ec] = std::from_chars( s.data(), s.data() + s.size(), result ); ec == std::errc() )
+		return result;
+
+	throw std::runtime_error( "bad conversion" );
+}
 
 struct Job
 {
-	uint64_t _jobid;
-	uint64_t _runtime;
-	uint64_t _nextjob;
+	int64_t _jobid;
+	int64_t _runtime;
+	int64_t _nextjob;
 };
 
 
 Job make_job( std::string_view id, std::string_view runtime, std::string_view next )
 {
-	// stoul might throw (that's intentional)
-	return Job{
-		std::stoul( std::string(id) ),
-		std::stoul( std::string(runtime) ),
-		std::stoul( std::string(next) )
+	return {
+		to_int( id ),
+		to_int( runtime ),
+		to_int( next )
 		};
 }
+
 
 int job_chain()
 {
@@ -73,13 +87,14 @@ int job_chain()
 	}
 
 
-	auto find_job =[&]( uint64_t nextjobid ) {
+	// find the job with a nextid equal to this
+	auto find_job =[&]( int64_t nextjobid ) {
 		return std::find_if( all_jobs.begin(), all_jobs.end(), [nextjobid](const Job& job) { return job._nextjob == nextjobid; } );
 	};
 
 
 	using Chain = std::vector< Job >;
-	std::map< uint64_t, Chain, std::greater<uint64_t> > chains;
+	std::map< int64_t, Chain, std::greater<int64_t> > chains;
 
 
 	while( !all_jobs.empty() )
@@ -87,24 +102,20 @@ int job_chain()
 		// start with the end of a chain and work back up
 		auto itr = find_job(0);
 		Chain chain;
+		int64_t tot_runtime = 0;
 
 		while( itr != all_jobs.end() )
 		{
-			chain.emplace_back( *itr );
-			const Job j = *itr;
+			chain.emplace_back( std::move(*itr) );
+			auto& j = chain.back();
+			tot_runtime += j._runtime; // keep a running total of this chain's runtime
 			all_jobs.erase( itr );
 			itr = find_job( j._jobid );
 		}
 
 		if( !chain.empty() )
 		{
-			// have a full chain.  calc chain runtime and store
-			uint64_t tot{ 0 };
-			for( auto& c : chain )
-			{
-				tot += c._runtime;
-			}
-			chains.insert( {tot, chain} );
+			chains.insert( {tot_runtime, chain} );
 		}
 		else
 		{

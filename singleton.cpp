@@ -7,6 +7,8 @@ Note:
 	 - If you do, simply just copy-paste your code here when you're done.
 ******************************************************************************/
 #include <memory>
+// #include <iostream>
+#include <string>
 
 template< typename T >
 class Singleton
@@ -19,18 +21,18 @@ public:
 	Singleton& operator= ( const Singleton& ) = delete;
 	~Singleton() = default;
 
-	static std::shared_ptr<T> instance()
+	template< typename ...Args >
+	static std::shared_ptr<T> instance( Args&&... args )
 	{
-		auto instance = std::make_shared<T>();
+		auto instance = std::make_shared<T>( std::forward<Args>(args)... );
 		return instance;
 	}
 };
-
 
 
 void single()
 {
 	// Singleton<int32_t> q; // error, can't just instantiate
 	auto s = Singleton<int64_t>::instance();
-	auto t = Singleton<std::string>::instance();
+	auto t = Singleton<std::string>::instance( "just a string" );
 }

@@ -1,8 +1,10 @@
 PROGRAM_NAME = interview2
 CXX = g++
+#CXX = clang++
 RM := rm -f
 CXXFLAGS = -std=c++17 -g3 -pthread -gdwarf-4 -DLinux -fPIC -Wno-deprecated -pipe
-STRICT_FLAGS = -Wall -Werror -Wextra -Wpedantic -Wvla -Wnull-dereference -Wswitch-enum 
+STRICT_FLAGS = -Wall -Werror -Wextra -Wpedantic -Wvla -Wnull-dereference -Wswitch-enum
+CLANG_FLAGS = -stdlib=libc++
 #MKDIR := $(shell mkdir build 2>&1 /dev/null)
 
 # tell me where to find boost
@@ -11,11 +13,15 @@ BOOST_LIB = /usr/local/lib
 
 # "compiler=..." will override CXX
 ifeq "clang" "$(compiler)"
-    CXX = /opt/clang-latest/bin/clang++
+    CXX = clang++
 else ifeq "gcc" "$(compiler)"
     CXX = g++
 else ifneq "" "$(compiler)"
     $(error unknown compiler $(compiler))
+endif
+
+ifeq "clang++" "$(CXX)"
+    CXXFLAGS += $(CLANG_FLAGS)
 endif
 
 # default to debug
