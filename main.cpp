@@ -12,6 +12,8 @@ void single();
 void queue();
 void vub( std::vector<std::int64_t>& /*v*/, std::int64_t /*min_val*/ );
 void job_chain();
+void test_min_gates();
+int getMinGates( std::vector<int> landingTimes, std::vector<int> takeOffTimes, int maxWaitTime, int initialPlanes );
 
 
 int main( int /*argc*/, char **/*argv*/ )
@@ -24,6 +26,36 @@ int main( int /*argc*/, char **/*argv*/ )
 	queue();
 	std::vector<std::int64_t> v{1, 7, 3, 6, 5, 2, 4};
 	vub( v, 3 );
-	job_chain();
+	// job_chain();
+	test_min_gates();
 	return 0;
+}
+
+void test_min_gates()
+{
+	std::cout << "Testing airport\n";
+
+	// no wait
+	if( auto r = getMinGates( {630,645,730,1100}, {700,845,1015,1130}, 0, 1); r != 3 )
+		std::cout << "Fail airport 1.  Expected 3, got " << r << "\n";
+
+	// 20 min wait
+	if( auto r = getMinGates( {630,645,730,1100}, {700,845,1015,1130}, 20, 1); r != 2 )
+		std::cout << "Fail airport 2.  Expected 2, got " << r << "\n";
+
+	// no leavers, wait 20
+	if( auto r = getMinGates( {630,645,730,1100}, {}, 20, 1); r != 4 )
+		std::cout << "Fail airport 3.  Expected 4, got " << r << "\n";
+
+	// no arrivals, wait 20
+	if( auto r = getMinGates( {}, {700,845,1015,1130}, 20, 4); r != 4 )
+		std::cout << "Fail airport 4.  Expected 4, got " << r << "\n";
+
+	// no nothing
+	if( auto r = getMinGates( {}, {}, 0, 1); r != 1 )
+		std::cout << "Fail airport 5.  Expected 1, got " << r << "\n";
+
+	// same arrive and leave times, no wait
+	if( auto r = getMinGates( {630,630,730,1100}, {845,845,1015,1130}, 0, 1); r != 3 )
+		std::cout << "Fail airport 6.  Expected 3, got " << r << "\n";
 }

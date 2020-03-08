@@ -51,7 +51,8 @@ OBJS =  main.o \
         singleton.o \
         queue.o \
         vector_upper_bound.o \
-        job_chain.o
+        job_chain.o \
+        airport.o
 
 $(PROGRAM_NAME): $(OBJS) 
 	@echo " "
@@ -84,6 +85,10 @@ vector_upper_bound.o: vector_upper_bound.cpp
 
 job_chain.o: job_chain.cpp
 	$(CXX) -c $(CXXFLAGS) job_chain.cpp
+
+airport.o: airport.cpp
+	$(CXX) -c $(CXXFLAGS) airport.cpp
+
 
 clean:
 	@-$(RM) $(OBJS) 2>&1 >/dev/null
