@@ -14,6 +14,8 @@ void vub( std::vector<std::int64_t>& /*v*/, std::int64_t /*min_val*/ );
 void job_chain();
 void test_min_gates();
 int getMinGates( std::vector<int> landingTimes, std::vector<int> takeOffTimes, int maxWaitTime, int initialPlanes );
+void test_robo_trade();
+std::vector< std::string > robo_trade( std::vector<std::string> text );
 
 
 int main( int /*argc*/, char **/*argv*/ )
@@ -28,8 +30,23 @@ int main( int /*argc*/, char **/*argv*/ )
 	vub( v, 3 );
 	// job_chain();
 	test_min_gates();
+	test_robo_trade();
 	return 0;
 }
+
+
+void test_robo_trade()
+{
+	std::cout << "Testing robo_trader\n";
+	std::vector< std::string > input;
+	input.emplace_back( "L,AAPL,100,B" );
+	input.emplace_back( "Q,AAPL,100,S,100" ); // makes a trade
+
+	auto result = robo_trade( input );
+	if( auto r = result.size(); r != 1 )
+		std::cout << "Wrong number of trades.  Expected 1, got " << r << '\n';
+}
+
 
 void test_min_gates()
 {

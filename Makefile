@@ -52,7 +52,8 @@ OBJS =  main.o \
         queue.o \
         vector_upper_bound.o \
         job_chain.o \
-        airport.o
+        airport.o \
+        robo_trader.o
 
 $(PROGRAM_NAME): $(OBJS) 
 	@echo " "
@@ -88,6 +89,9 @@ job_chain.o: job_chain.cpp
 
 airport.o: airport.cpp
 	$(CXX) -c $(CXXFLAGS) airport.cpp
+
+robo_trader.o: robo_trader.cpp
+	$(CXX) -c $(CXXFLAGS) robo_trader.cpp
 
 
 clean:
